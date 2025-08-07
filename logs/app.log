@@ -1,0 +1,20 @@
+[INFO] 2025/08/04 13:36:39 logger.go:51: No authentication configured
+[INFO] 2025/08/04 13:36:39 logger.go:51: Attempting to connect to Kafka brokers: [localhost:9092]
+[ERROR] 2025/08/04 13:36:42 logger.go:58: Failed to create Kafka producer: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it.
+[ERROR] 2025/08/04 13:36:45 logger.go:58: Failed to connect to broker localhost:9092: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it.
+[ERROR] 2025/08/04 13:36:45 logger.go:58: Failed to create Kafka producer: failed to create kafka producer: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it.
+[ERROR] 2025/08/04 13:36:45 logger.go:58: Failed to create alert handler: failed to create kafka producer: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it.
+[INFO] 2025/08/04 13:44:16 logger.go:51: No Kafka brokers configured, running in disabled mode
+[INFO] 2025/08/04 13:44:16 logger.go:51: Starting server on :8080
+[INFO] 2025/08/04 13:45:45 logger.go:51: Received alert group with 1 alerts from test
+[INFO] 2025/08/04 13:45:45 logger.go:51: Kafka disabled, would have sent message to topic prometheus-alerts: {"version":"","groupKey":"","truncatedAlerts":0,"status":"firing","receiver":"test","groupLabels":null,"commonLabels":null,"commonAnnotations":null,"externalURL":"","alerts":[{"status":"firing","labels":{"alertname":"TestAlert","severity":"critical"},"annotations":{"description":"This is a test alert"},"startsAt":"2025-08-04T13:44:20+08:00","endsAt":"0001-01-01T00:00:00Z"}]}
+[INFO] 2025/08/04 13:45:45 logger.go:51: Successfully forwarded alert group to Kafka
+[INFO] 2025/08/04 13:55:01 logger.go:51: No Kafka brokers configured, running in disabled mode
+[INFO] 2025/08/04 13:55:01 logger.go:51: Starting server on :8080
+[ERROR] 2025/08/04 13:55:01 logger.go:58: Error starting server: listen tcp :8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+[INFO] 2025/08/04 13:55:49 logger.go:51: No Kafka brokers configured, running in disabled mode
+[INFO] 2025/08/04 13:55:49 logger.go:51: Starting server on :8081
+[INFO] 2025/08/04 13:57:47 logger.go:51: Received alert group with 1 alerts from test
+[INFO] 2025/08/04 13:57:47 logger.go:51: Kafka disabled, would have sent message to topic prometheus-alerts: {"version":"","groupKey":"","truncatedAlerts":0,"status":"firing","receiver":"test","groupLabels":null,"commonLabels":null,"commonAnnotations":null,"externalURL":"","alerts":[{"status":"firing","labels":{"alertname":"TestAlert","severity":"critical"},"annotations":{"description":"This is a test alert"},"startsAt":"2025-08-04T13:55:56+08:00","endsAt":"0001-01-01T00:00:00Z"}]}
+[INFO] 2025/08/04 13:57:47 logger.go:51: Successfully forwarded alert group to Kafka
+{"level":"error","ts":1754290069.4242754,"msg":"Failed to create Kafka producer: failed to create Kafka producer: kafka: client has run out of available brokers to talk to: dial tcp [::1]:9092: connectex: No connection could be made because the target machine actively refused it."}

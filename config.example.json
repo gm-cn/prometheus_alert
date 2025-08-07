@@ -1,0 +1,22 @@
+{
+  "server": {
+    "port": 8080
+  },
+  "kafka": {
+    "brokers": ["localhost:9092"],
+    "topic": "prometheus_alerts",
+    "username": "your-username",
+    "password": "your-password",
+    "mechanism": "PLAIN",
+    "protocol": "PLAINTEXT",
+    "timeout": "30s"
+  },
+  "log": {
+    "level": "info",
+    "filename": "logs/app.log",
+    "maxSize": 100,
+    "maxBackups": 3,
+    "maxAge": 28,
+    "compress": true
+  }
+}
