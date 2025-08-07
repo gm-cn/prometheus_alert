@@ -9,9 +9,10 @@ import (
 
 // Config 配置结构
 type Config struct {
-	Server ServerConfig `json:"server"`
-	Kafka  KafkaConfig  `json:"kafka"`
-	Log    LogConfig    `json:"log"`
+	Server     ServerConfig     `json:"server"`
+	Kafka      KafkaConfig      `json:"kafka"`
+	Log        LogConfig        `json:"log"`
+	Prometheus PrometheusConfig `json:"prometheus"` // 新增 Prometheus 配置
 }
 
 // ServerConfig 服务器配置
@@ -38,6 +39,14 @@ type LogConfig struct {
 	MaxBackups int    `json:"maxBackups"` // 保留的旧日志文件最大数量
 	MaxAge     int    `json:"maxAge"`     // 保留的旧日志文件的最大天数
 	Compress   bool   `json:"compress"`   // 是否压缩旧日志文件
+}
+
+// PrometheusConfig Prometheus 相关配置
+type PrometheusConfig struct {
+	RemoteURL    string   `json:"remoteUrl"`    // 远程 Prometheus 服务器地址
+	RuleFilePath string   `json:"ruleFilePath"` // 本地规则文件路径
+	ReloadURL    string   `json:"reloadUrl"`    // Prometheus reload 接口地址
+	SyncInterval Duration `json:"syncInterval"` // 同步间隔时间
 }
 
 // Duration 是一个自定义的时间持续类型，用于支持 JSON 解析

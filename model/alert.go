@@ -7,21 +7,22 @@ import (
 
 // AlertGroup 表示一组告警
 type AlertGroup struct {
-	Version           string            `json:"version"`
-	GroupKey          string            `json:"groupKey"`
-	TruncatedAlerts   int               `json:"truncatedAlerts"`
-	Status            string            `json:"status"`
-	Receiver          string            `json:"receiver"`
-	GroupLabels       map[string]string `json:"groupLabels"`
-	CommonLabels      map[string]string `json:"commonLabels"`
-	CommonAnnotations map[string]string `json:"commonAnnotations"`
-	ExternalURL       string            `json:"externalURL"`
-	Alerts            []Alert           `json:"alerts"`
+	//Version           string            `json:"version"`
+	//GroupKey          string            `json:"groupKey"`
+	//TruncatedAlerts   int               `json:"truncatedAlerts"`
+	//Status            string            `json:"status"`
+	//Receiver          string            `json:"receiver"`
+	//GroupLabels       map[string]string `json:"groupLabels"`
+	//CommonLabels      map[string]string `json:"commonLabels"`
+	//CommonAnnotations map[string]string `json:"commonAnnotations"`
+	//ExternalURL       string            `json:"externalURL"`
+	Alerts []Alert `json:"alerts"`
 }
 
 // Alert 表示单个告警
 type Alert struct {
-	Status       string            `json:"status"`
+	//Status       string            `json:"status"`
+	Value        string            `json:"value"`
 	Labels       map[string]string `json:"labels"`
 	Annotations  map[string]string `json:"annotations"`
 	StartsAt     time.Time         `json:"startsAt"`
@@ -32,17 +33,25 @@ type Alert struct {
 
 // CreateAlertGroupFromAlerts 从告警数组创建告警组
 func CreateAlertGroupFromAlerts(alerts []Alert) *AlertGroup {
+	alertList := []Alert{}
 	if len(alerts) == 0 {
 		return nil
 	}
+	for _, alert := range alerts {
+		if _, exits := alert.Annotations["value"]; !exits {
+			continue
+		}
+		alert.Value = alert.Annotations["value"]
+		alertList = append(alertList, alert)
+	}
 
 	// 使用第一个告警的信息作为公共标签
-	firstAlert := alerts[0]
+	//firstAlert := alerts[0]
 	return &AlertGroup{
-		Version:     "4", // Prometheus 2.53.4
-		Status:      "firing",
-		GroupLabels: firstAlert.Labels,
-		Alerts:      alerts,
+		//Version:     "4", // Prometheus 2.53.4
+		//Status:      "firing",
+		//GroupLabels: firstAlert.Labels,
+		Alerts: alertList,
 	}
 }
 

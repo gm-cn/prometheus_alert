@@ -45,7 +45,7 @@ func (h *AlertHandler) HandleAlert(ctx iris.Context) {
 		// 如果解析数组失败，尝试解析为AlertGroup
 		var alertGroup model.AlertGroup
 		if err := json.Unmarshal(body, &alertGroup); err != nil {
-			logger.Error("Failed to unmarshal alert data: %v", err)
+			logger.Error("Failed to unmarshal alert group data: %v", err)
 			ctx.StatusCode(iris.StatusBadRequest)
 			ctx.JSON(iris.Map{
 				"error": "Invalid alert format",

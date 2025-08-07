@@ -42,6 +42,11 @@ func main() {
 	}
 	defer producer.Close()
 
+	// 创建规则同步处理器
+	ruleSyncHandler := handler.NewRuleSyncHandler(cfg)
+	ruleSyncHandler.Start()
+	defer ruleSyncHandler.Stop()
+
 	// 创建 Iris 应用
 	app := iris.New()
 
@@ -59,6 +64,10 @@ func main() {
 	go func() {
 		<-quit
 		logger.Info("Server is shutting down...")
+
+		// 停止规则同步处理器
+		ruleSyncHandler.Stop()
+
 		if err := app.Shutdown(context.Background()); err != nil {
 			logger.Error("Failed to shutdown server: %v", err)
 		}

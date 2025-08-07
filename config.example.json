@@ -4,9 +4,9 @@
   },
   "kafka": {
     "brokers": ["localhost:9092"],
-    "topic": "prometheus_alerts",
-    "username": "your-username",
-    "password": "your-password",
+    "topic": "alerts",
+    "username": "",
+    "password": "",
     "mechanism": "PLAIN",
     "protocol": "PLAINTEXT",
     "timeout": "30s"
@@ -18,5 +18,11 @@
     "maxBackups": 3,
     "maxAge": 28,
     "compress": true
+  },
+  "prometheus": {
+    "remoteUrl": "http://remote-prometheus:9090/api/v1/rules",
+    "ruleFilePath": "/etc/prometheus/rules/alert.rules.yml",
+    "reloadUrl": "http://localhost:9090/-/reload",
+    "syncInterval": "5m"
   }
 }
