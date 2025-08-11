@@ -20,9 +20,9 @@
     "compress": true
   },
   "prometheus": {
-    "remoteUrl": "http://remote-prometheus:9090/api/v1/rules",
-    "ruleFilePath": "/etc/prometheus/rules/alert.rules.yml",
-    "reloadUrl": "http://localhost:9090/-/reload",
-    "syncInterval": "5m"
+    "remoteUrl": "http://pre.cloudbee-api.jd.local/api/v1/event-strategy-main/list",
+    "ruleFilePath": "/export/prometheus4/rule/alert.yml",
+    "reloadUrl": "http://127.0.0.1:19093/-/reload",
+    "syncInterval": "1m"
   }
 }

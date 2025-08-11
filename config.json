@@ -18,5 +18,11 @@
     "maxBackups": 3,
     "maxAge": 28,
     "compress": true
+  },
+  "prometheus": {
+    "remoteUrl": "http://pre.cloudbee-api.jd.local/api/v1/event-strategy-main/list",
+    "ruleFilePath": "rules/gpu_alerts.yml",
+    "reloadUrl": "http://127.0.0.1:19093/-/reload",
+    "syncInterval": "1m"
   }
 }
