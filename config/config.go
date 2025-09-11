@@ -9,10 +9,11 @@ import (
 
 // Config 配置结构
 type Config struct {
-	Server     ServerConfig     `json:"server"`
-	Kafka      KafkaConfig      `json:"kafka"`
-	Log        LogConfig        `json:"log"`
-	Prometheus PrometheusConfig `json:"prometheus"` // 新增 Prometheus 配置
+	Server ServerConfig `json:"server"`
+	Kafka  KafkaConfig  `json:"kafka"`
+	Log    LogConfig    `json:"log"`
+	//Prometheus PrometheusConfig `json:"prometheus"` // 新增 Prometheus 配置
+	Prometheus []PrometheusConfig `json:"prometheus"` // 新增 Prometheus 配置
 }
 
 // ServerConfig 服务器配置

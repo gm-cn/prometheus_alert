@@ -35,25 +35,47 @@ func NewRuleSyncHandler(cfg *config.Config) *RuleSyncHandler {
 
 // Start 启动规则同步处理器
 func (h *RuleSyncHandler) Start() {
-	ticker := time.NewTicker(h.config.Prometheus.SyncInterval.Duration)
-	go func() {
-		// 启动时立即执行一次同步
-		if err := h.syncRules(); err != nil {
-			logger.Error("Failed to sync rules: %v", err)
-		}
-
-		for {
-			select {
-			case <-ticker.C:
-				if err := h.syncRules(); err != nil {
-					logger.Error("Failed to sync rules: %v", err)
-				}
-			case <-h.done:
-				ticker.Stop()
-				return
+	for _, prometheusConfig := range h.config.Prometheus {
+		ticker := time.NewTicker(prometheusConfig.SyncInterval.Duration)
+		go func() {
+			// 启动时立即执行一次同步
+			if err := h.syncRules(prometheusConfig); err != nil {
+				logger.Error("Failed to sync rules: %v", err)
 			}
-		}
-	}()
+
+			for {
+				select {
+				case <-ticker.C:
+					if err := h.syncRules(prometheusConfig); err != nil {
+						logger.Error("Failed to sync rules: %v", err)
+					}
+				case <-h.done:
+					ticker.Stop()
+					return
+				}
+			}
+		}()
+	}
+
+	//ticker := time.NewTicker(h.config.Prometheus[0].SyncInterval.Duration)
+	//go func() {
+	//	// 启动时立即执行一次同步
+	//	if err := h.syncRules(); err != nil {
+	//		logger.Error("Failed to sync rules: %v", err)
+	//	}
+	//
+	//	for {
+	//		select {
+	//		case <-ticker.C:
+	//			if err := h.syncRules(); err != nil {
+	//				logger.Error("Failed to sync rules: %v", err)
+	//			}
+	//		case <-h.done:
+	//			ticker.Stop()
+	//			return
+	//		}
+	//	}
+	//}()
 }
 
 // Stop 停止规则同步处理器
@@ -62,15 +84,15 @@ func (h *RuleSyncHandler) Stop() {
 }
 
 // syncRules 同步规则
-func (h *RuleSyncHandler) syncRules() error {
+func (h *RuleSyncHandler) syncRules(prometheusConfig config.PrometheusConfig) error {
 	// 获取远程规则
-	remoteRules, err := h.fetchRemoteRules()
+	remoteRules, err := h.fetchRemoteRules(prometheusConfig)
 	if err != nil {
 		return fmt.Errorf("failed to fetch remote rules: %v", err)
 	}
 
 	// 读取本地规则
-	localRules, err := h.readLocalRules()
+	localRules, err := h.readLocalRules(prometheusConfig)
 	if err != nil {
 		return fmt.Errorf("failed to read local rules: %v", err)
 	}
@@ -82,12 +104,12 @@ func (h *RuleSyncHandler) syncRules() error {
 	}
 
 	// 更新本地规则文件
-	if err := h.updateLocalRules(remoteRules); err != nil {
+	if err := h.updateLocalRules(remoteRules, prometheusConfig); err != nil {
 		return fmt.Errorf("failed to update local rules: %v", err)
 	}
 
 	// 重新加载 Prometheus
-	if err := h.reloadPrometheus(); err != nil {
+	if err := h.reloadPrometheus(prometheusConfig); err != nil {
 		return fmt.Errorf("failed to reload Prometheus: %v", err)
 	}
 
@@ -95,7 +117,7 @@ func (h *RuleSyncHandler) syncRules() error {
 	return nil
 }
 
-func (h *RuleSyncHandler) fetchRemoteRules() (*model.RuleFile, error) {
+func (h *RuleSyncHandler) fetchRemoteRules(prometheusConfig config.PrometheusConfig) (*model.RuleFile, error) {
 	requestBody := map[string]interface{}{
 		"strategyType": []int{0, 1},
 		"category":     []string{"server_gpu_exporter"},
@@ -106,7 +128,7 @@ func (h *RuleSyncHandler) fetchRemoteRules() (*model.RuleFile, error) {
 		return nil, fmt.Errorf("failed to marshal request body: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", h.config.Prometheus.RemoteURL, bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequest("POST", prometheusConfig.RemoteURL, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}
@@ -165,9 +187,9 @@ func (h *RuleSyncHandler) fetchRemoteRules() (*model.RuleFile, error) {
 }
 
 // readLocalRules 读取本地规则文件
-func (h *RuleSyncHandler) readLocalRules() (*model.RuleFile, error) {
-	logger.Info("Reading rules from %s", h.config.Prometheus.RuleFilePath)
-	data, err := os.ReadFile(h.config.Prometheus.RuleFilePath)
+func (h *RuleSyncHandler) readLocalRules(prometheusConfig config.PrometheusConfig) (*model.RuleFile, error) {
+	logger.Info("Reading rules from %s", prometheusConfig.RuleFilePath)
+	data, err := os.ReadFile(prometheusConfig.RuleFilePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			// 如果文件不存在，返回空的规则文件
@@ -185,7 +207,7 @@ func (h *RuleSyncHandler) readLocalRules() (*model.RuleFile, error) {
 }
 
 // updateLocalRules 更新本地规则文件
-func (h *RuleSyncHandler) updateLocalRules(rules *model.RuleFile) error {
+func (h *RuleSyncHandler) updateLocalRules(rules *model.RuleFile, prometheusConfig config.PrometheusConfig) error {
 	// 创建一个新的 yaml.Node 来控制输出格式
 	node := &yaml.Node{
 		Kind: yaml.DocumentNode,
@@ -320,12 +342,12 @@ func (h *RuleSyncHandler) updateLocalRules(rules *model.RuleFile) error {
 	}
 
 	encoder.Close()
-	return os.WriteFile(h.config.Prometheus.RuleFilePath, buf.Bytes(), 0644)
+	return os.WriteFile(prometheusConfig.RuleFilePath, buf.Bytes(), 0644)
 }
 
 // reloadPrometheus 重新加载 Prometheus
-func (h *RuleSyncHandler) reloadPrometheus() error {
-	resp, err := h.client.Post(h.config.Prometheus.ReloadURL, "application/json", nil)
+func (h *RuleSyncHandler) reloadPrometheus(prometheusConfig config.PrometheusConfig) error {
+	resp, err := h.client.Post(prometheusConfig.ReloadURL, "application/json", nil)
 	if err != nil {
 		return err
 	}

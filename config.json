@@ -1,28 +1,40 @@
 {
   "server": {
-    "port": 8080
+    "port": 18081
   },
   "kafka": {
-    "brokers": ["localhost:9092"],
-    "topic": "prometheus_alerts",
-    "username": "",
-    "password": "",
-    "mechanism": "PLAIN",
+    "brokers": ["yalongjiangzyx.jdq.jd.local:9000"],
+    "topic": "gpu_alert_raw_online",
+    "username": "P5a42d9ea",
+    "password": "GksfzrgFTr1GyMlO",
+    "mechanism": "SCRAM-SHA-256",
     "protocol": "PLAINTEXT",
     "timeout": "30s"
   },
   "log": {
-    "level": "debug",
-    "filename": "",
+    "path": "logs/app.log",
     "maxSize": 100,
-    "maxBackups": 3,
-    "maxAge": 28,
+    "maxBackups": 10,
+    "maxAge": 30,
     "compress": true
   },
-  "prometheus": {
-    "remoteUrl": "http://pre.cloudbee-api.jd.local/api/v1/event-strategy-main/list",
-    "ruleFilePath": "rules/gpu_alerts.yml",
-    "reloadUrl": "http://127.0.0.1:19093/-/reload",
-    "syncInterval": "1m"
-  }
+  "prometheus": [{
+      "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
+      "ruleFilePath": "/export/prometheus/rule/alert.yml",
+      "reloadUrl": "http://127.0.0.1:9090/-/reload",
+      "syncInterval": "1m"
+    },
+    {
+      "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
+      "ruleFilePath": "/export/prometheus1/rule/alert.yml",
+      "reloadUrl": "http://127.0.0.1:19090/-/reload",
+      "syncInterval": "1m"
+    },
+    {
+      "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
+      "ruleFilePath": "/export/prometheus2/rule/alert.yml",
+      "reloadUrl": "http://127.0.0.1:19091/-/reload",
+      "syncInterval": "1m"
+    }
+  ]
 }

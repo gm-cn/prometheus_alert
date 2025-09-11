@@ -16,7 +16,8 @@ type AlertGroup struct {
 	//CommonLabels      map[string]string `json:"commonLabels"`
 	//CommonAnnotations map[string]string `json:"commonAnnotations"`
 	//ExternalURL       string            `json:"externalURL"`
-	Alerts []Alert `json:"alerts"`
+	Alerts    []Alert `json:"alerts"`
+	Timestamp string  `json:"timestamp"`
 }
 
 // Alert 表示单个告警
@@ -51,7 +52,8 @@ func CreateAlertGroupFromAlerts(alerts []Alert) *AlertGroup {
 		//Version:     "4", // Prometheus 2.53.4
 		//Status:      "firing",
 		//GroupLabels: firstAlert.Labels,
-		Alerts: alertList,
+		Timestamp: time.Now().Format(time.DateTime),
+		Alerts:    alertList,
 	}
 }
 

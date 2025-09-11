@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gpu_alert_forward.iml" filepath="$PROJECT_DIR$/.idea/gpu_alert_forward.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mas_prometheus_alert.iml" filepath="$PROJECT_DIR$/.idea/mas_prometheus_alert.iml" />
     </modules>
   </component>
 </project>
