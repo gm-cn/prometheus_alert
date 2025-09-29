@@ -120,7 +120,7 @@ func (h *RuleSyncHandler) syncRules(prometheusConfig config.PrometheusConfig) er
 func (h *RuleSyncHandler) fetchRemoteRules(prometheusConfig config.PrometheusConfig) (*model.RuleFile, error) {
 	requestBody := map[string]interface{}{
 		"strategyType": []int{0, 1},
-		"category":     []string{"server_gpu_exporter"},
+		"category":     []string{prometheusConfig.RuleTag},
 	}
 
 	jsonBody, err := json.Marshal(requestBody)

@@ -46,6 +46,7 @@ type LogConfig struct {
 type PrometheusConfig struct {
 	RemoteURL    string   `json:"remoteUrl"`    // 远程 Prometheus 服务器地址
 	RuleFilePath string   `json:"ruleFilePath"` // 本地规则文件路径
+	RuleTag      string   `json:"ruleTag"`      // tag
 	ReloadURL    string   `json:"reloadUrl"`    // Prometheus reload 接口地址
 	SyncInterval Duration `json:"syncInterval"` // 同步间隔时间
 }

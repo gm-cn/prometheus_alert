@@ -21,18 +21,21 @@
   "prometheus": [{
       "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
       "ruleFilePath": "/export/prometheus/rule/alert.yml",
+      "ruleTag": "server_gpu_exporter",
       "reloadUrl": "http://127.0.0.1:9090/-/reload",
       "syncInterval": "1m"
     },
     {
       "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
       "ruleFilePath": "/export/prometheus1/rule/alert.yml",
+      "ruleTag": "server_gpu_exporter",
       "reloadUrl": "http://127.0.0.1:19090/-/reload",
       "syncInterval": "1m"
     },
     {
       "remoteUrl": "http://cloudbee-api.jd.local/api/v1/event-strategy-main/list",
       "ruleFilePath": "/export/prometheus2/rule/alert.yml",
+      "ruleTag": "server_gpu_exporter",
       "reloadUrl": "http://127.0.0.1:19091/-/reload",
       "syncInterval": "1m"
     }
