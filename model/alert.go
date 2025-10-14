@@ -17,6 +17,7 @@ type AlertGroup struct {
 	CommonAnnotations map[string]string `json:"commonAnnotations"`
 	ExternalURL       string            `json:"externalURL"`
 	Alerts            []Alert           `json:"alerts"`
+	Timestamp         string            `json:"timestamp"`
 }
 
 // Alert 表示单个告警
@@ -43,6 +44,7 @@ func CreateAlertGroupFromAlerts(alerts []Alert) *AlertGroup {
 		Status:      "firing",
 		GroupLabels: firstAlert.Labels,
 		Alerts:      alerts,
+		Timestamp:   time.Now().Format(time.DateTime),
 	}
 }
 

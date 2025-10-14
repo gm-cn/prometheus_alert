@@ -3,11 +3,11 @@
     "port": 8080
   },
   "kafka": {
-    "brokers": ["localhost:9092"],
-    "topic": "prometheus_alerts",
-    "username": "",
-    "password": "",
-    "mechanism": "PLAIN",
+    "brokers": ["yalongjiangzyx.jdq.jd.local:9000"],
+    "topic": "gpu_alert_raw",
+    "username": "Pee3736ed",
+    "password": "1FCoFuyNzKQUFhVF",
+    "mechanism": "SCRAM-SHA-256",
     "protocol": "PLAINTEXT",
     "timeout": "30s"
   },
