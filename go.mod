@@ -1,8 +1,6 @@
 module gpu_alert_forward
 
-go 1.23.0
-
-toolchain go1.23.11
+go 1.23.12
 
 require (
 	github.com/IBM/sarama v1.45.2
