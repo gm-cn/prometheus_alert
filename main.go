@@ -27,12 +27,23 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Printf("Loaded config from file: %s\n", *configPath)
+	fmt.Printf("Loaded config Server body : %s\n", cfg.Server)
+	fmt.Printf("Loaded config Kafka body : %s\n", cfg.Kafka)
+	fmt.Printf("Loaded config Log body : %s\n", cfg.Log)
+	for _, v := range cfg.Prometheus {
+		fmt.Printf("Loaded config Prometheus body : %s\n", v)
+	}
 
 	// 初始化日志
 	if err := logger.InitLogger(cfg.Log); err != nil {
 		fmt.Printf("Failed to initialize logger: %v\n", err)
 		os.Exit(1)
 	}
+
+	// 创建规则同步处理器
+	ruleSyncHandler := handler.NewRuleSyncHandler(cfg)
+	ruleSyncHandler.Start()
+	defer ruleSyncHandler.Stop()
 
 	// 创建 Kafka 生产者
 	producer, err := kafka.NewProducer(cfg.Kafka)
@@ -41,11 +52,6 @@ func main() {
 		os.Exit(1)
 	}
 	defer producer.Close()
-
-	// 创建规则同步处理器
-	ruleSyncHandler := handler.NewRuleSyncHandler(cfg)
-	ruleSyncHandler.Start()
-	defer ruleSyncHandler.Stop()
 
 	// 创建 Iris 应用
 	app := iris.New()
